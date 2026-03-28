@@ -8,46 +8,90 @@
       margin: 0; 
       font-family: Arial, sans-serif;
     }
+    /* 3D 模型区域 - 上半部分 */
     model-viewer { 
       width: 100vw; 
-      height: 100vh; 
+      height: 50vh;
+      display: block;
     }
-    /* 图片展示区样式 */
+    
+    /* 图片展示区 - 下半部分 */
     .image-gallery {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
+      width: 100vw;
+      height: 50vh;
       display: flex;
-      gap: 10px;
-      z-index: 10;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
       background: rgba(255, 255, 255, 0.9);
-      padding: 10px 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      padding: 20px;
+      box-sizing: border-box;
     }
 
     .image-gallery img {
-      width: 80px;
-      height: 80px;
-      object-fit: cover;
-      border-radius: 8px;
+      max-width: 300px;
+      max-height: 300px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: 12px;
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s;
-      border: 2px solid transparent;
+      border: 3px solid transparent;
     }
 
     .image-gallery img:hover {
-      transform: scale(1.1);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transform: scale(1.05);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
       border-color: #4285f4;
     }
+
+    /* 全屏模态框样式 */
+    .image-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .image-modal.active {
+      display: flex;
+    }
+
+    .image-modal img {
+      max-width: 90%;
+      max-height: 90%;
+      width: auto;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .image-modal .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .image-modal .close-btn:hover {
+      color: #4285f4;
+    }
   </style>
-  <!-- 引入 model-viewer -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
 <body>
-  <!-- 3D 模型查看器 -->
+  <!-- 3D 模型查看器 - 上半部分 -->
   <model-viewer 
     src="./model.glb" 
     camera-controls 
@@ -57,11 +101,50 @@
     shadow-intensity="1"
   ></model-viewer>
   
-  <!-- 图片展示区 -->
+  <!-- 图片展示区 - 下半部分 -->
   <div class="image-gallery">
     <img src="./image1.jpg" alt="产品图 1" title="点击查看">
-    <img src="./image2.jpg" alt="产品图 2" title="点击查看">
-    <img src="./image3.jpg" alt="产品图 3" title="点击查看">
   </div>
+
+  <!-- 全屏模态框 -->
+  <div class="image-modal" id="imageModal">
+    <span class="close-btn" id="closeBtn">&times;</span>
+    <img src="" alt="全屏预览" id="modalImage">
+  </div>
+
+  <script>
+    // 获取元素
+    const modal = document.getElementById('imageModal');
+    const modalImage = document.getElementById('modalImage');
+    const closeBtn = document.getElementById('closeBtn');
+    const galleryImages = document.querySelectorAll('.image-gallery img');
+
+    // 点击图片打开全屏
+    galleryImages.forEach(img => {
+      img.addEventListener('click', () => {
+        modalImage.src = img.src;
+        modal.classList.add('active');
+      });
+    });
+
+    // 关闭按钮点击
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+
+    // 点击模态框背景关闭
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.remove('active');
+      }
+    });
+
+    // ESC 键关闭
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        modal.classList.remove('active');
+      }
+    });
+  </script>
 </body>
 </html>
