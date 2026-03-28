@@ -2,16 +2,52 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>简易3D查看</title>
+  <title>简易 3D 查看</title>
   <style>
-    body { margin: 0; }
-    model-viewer { width: 100vw; height: 100vh; }
+    body { 
+      margin: 0; 
+      font-family: Arial, sans-serif;
+    }
+    model-viewer { 
+      width: 100vw; 
+      height: 100vh; 
+    }
+    /* 图片展示区样式 */
+    .image-gallery {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .image-gallery img {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: 2px solid transparent;
+    }
+
+    .image-gallery img:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border-color: #4285f4;
+    }
   </style>
   <!-- 引入 model-viewer -->
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 </head>
 <body>
-  <!-- 直接写标签，路径对就能显示 -->
+  <!-- 3D 模型查看器 -->
   <model-viewer 
     src="./model.glb" 
     camera-controls 
@@ -20,5 +56,12 @@
     environment-image="neutral"
     shadow-intensity="1"
   ></model-viewer>
+  
+  <!-- 图片展示区 -->
+  <div class="image-gallery">
+    <img src="./image1.jpg" alt="产品图 1" title="点击查看">
+    <img src="./image2.jpg" alt="产品图 2" title="点击查看">
+    <img src="./image3.jpg" alt="产品图 3" title="点击查看">
+  </div>
 </body>
 </html>
